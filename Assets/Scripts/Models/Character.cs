@@ -34,7 +34,7 @@ public class Character : IXmlSerializable
     Path_AStar pathAStar;
     float movementPercentage; // Goes from 0 to 1 as we move from currTile to destTile
 
-    float speed = 5f;   // Tiles per second
+    float speed = 6f;   // Tiles per second
 
     Action<Character> cbCharacterChanged;
 
