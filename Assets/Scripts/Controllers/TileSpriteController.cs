@@ -47,6 +47,8 @@ public class TileSpriteController : MonoBehaviour
                 SpriteRenderer sr = tile_go.AddComponent<SpriteRenderer>();
                 sr.sprite = emptySprite;
                 sr.sortingLayerName = "Tiles";
+                //if ( != )
+                sr.material = Resources.Load<Material>("Materials/FloorMaterial");
 
                 OnTileChanged(tile_data);
             }

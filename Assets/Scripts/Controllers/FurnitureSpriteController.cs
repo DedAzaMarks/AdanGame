@@ -60,8 +60,19 @@ public class FurnitureSpriteController : MonoBehaviour
         // Add our tile/GO pair to the dictionary.
         furnitureGameObjectMap.Add(furn, furn_go);
 
+        if (furn.objectType == "Lamp")
+        {
+             Light light = furn_go.AddComponent<Light>();
+             light.color = Color.white;
+             //light.
+             furn_go.transform.position = new Vector3(furn.tile.X, furn.tile.Y, -1.0f);
+             //Debug.Log("Lamp coord " + furn_go.transform.position.x + " " + furn_go.transform.position.y + " " + furn_go.transform.position.z);
+        }
+
+
         furn_go.name = furn.objectType + "_" + furn.tile.X + "_" + furn.tile.Y;
-        furn_go.transform.position = new Vector3(furn.tile.X, furn.tile.Y, 0);
+        if (furn.objectType != "Lamp")
+            furn_go.transform.position = new Vector3(furn.tile.X, furn.tile.Y, 0);
         furn_go.transform.SetParent(this.transform, true);
 
         // FIXME: This hardcoding is not ideal!
@@ -71,6 +82,8 @@ public class FurnitureSpriteController : MonoBehaviour
             // Check to see if we actually have a wall north/south, and if so
             // then rotate this GO by 90 degrees
 
+            
+
             Tile northTile = world.GetTileAt(furn.tile.X, furn.tile.Y + 1);
             Tile southTile = world.GetTileAt(furn.tile.X, furn.tile.Y - 1);
 
@@ -79,6 +92,8 @@ public class FurnitureSpriteController : MonoBehaviour
             {
                 furn_go.transform.rotation = Quaternion.Euler(0, 0, 90);
                 furn_go.transform.Translate(1f, 0, 0, Space.World); // UGLY HACK TO COMPENSATE FOR BOTTOM_LEFT ANCHOR POINT!
+
+                
             }
         }
 
@@ -87,6 +102,14 @@ public class FurnitureSpriteController : MonoBehaviour
         SpriteRenderer sr = furn_go.AddComponent<SpriteRenderer>();
         sr.sprite = GetSpriteForFurniture(furn);
         sr.sortingLayerName = "Furniture";
+        if (furn.objectType != "Lamp")
+            sr.material = Resources.Load<Material>("Materials/FurnitureMaterial");
+
+        // Material material = furn_go.GetComponent<Renderer>().material;
+        // material = Resources.Load<Material>("Materials/MyMaterial");
+        // furn_go.material = Material;
+        // material.shader = Shader.Find("Diffuse");
+        // material.color = Color.white;
 
         // Register our callback so that our GameObject gets updated whenever
         // the object's into changes.

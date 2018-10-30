@@ -58,16 +58,25 @@ public class CharacterSpriteController : MonoBehaviour
         // This creates a new GameObject and adds it to our scene.
         GameObject char_go = new GameObject();
 
+
+        //IMPORTANT ONE
+        // Material material = GetComponent<Renderer>().material;
+        // char_go.GetComponent<Material>();
+        //material = char_go.AddComponent<Material>();
+
         // Add our tile/GO pair to the dictionary.
         characterGameObjectMap.Add(c, char_go);
 
         char_go.name = "Character";
         char_go.transform.position = new Vector3(c.X, c.Y, 0);
-        char_go.transform.SetParent(this.transform, true);
+        
 
         SpriteRenderer sr = char_go.AddComponent<SpriteRenderer>();
         sr.sprite = characterSprites["p1_front"];
         sr.sortingLayerName = "Characters";
+
+        // Material material = char_go.GetComponent<Renderer>().material;
+        // material.shader = Shader.Find("Diffuse");
 
         // Register our callback so that our GameObject gets updated whenever
         // the object's into changes.

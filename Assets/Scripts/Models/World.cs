@@ -129,6 +129,26 @@ public class World : IXmlSerializable
             )
         );
 
+        furniturePrototypes.Add("Lamp",
+            new Furniture(
+                "Lamp",
+                1,
+                1,
+                1,
+                false
+            )
+        );
+
+        furniturePrototypes.Add("Chair",
+            new Furniture(
+                "Chair",
+                0,
+                1,
+                1,
+                false
+            )
+        );
+
         // What if the object behaviours were scriptable? And therefore were part of the text file
         // we are reading in now?
 
