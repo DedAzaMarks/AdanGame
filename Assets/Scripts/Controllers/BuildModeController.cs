@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
 
+public enum BuildMode
+{
+    FLOOR,
+    FURNITURE,
+    DECONSTRUCT
+}
 public class BuildModeController : MonoBehaviour
 {
-
+    public BuildMode buildMode = BuildMode.FLOOR;
     bool buildModeIsObjects = false;
     TileType buildModeTile = TileType.Floor;
     string buildModeObjectType;
@@ -29,6 +35,14 @@ public class BuildModeController : MonoBehaviour
         // Wall is not a Tile!  Wall is an "Furniture" that exists on TOP of a tile.
         buildModeIsObjects = true;
         buildModeObjectType = objectType;
+    }
+
+    public void SetMode_BulldozeFurniture()
+    {
+        
+        buildMode = BuildMode.DECONSTRUCT;
+		GameObject.FindObjectOfType<MouseController>().StartBuildMode();
+	
     }
 
     public void DoPathfindingTest()
@@ -60,7 +74,8 @@ public class BuildModeController : MonoBehaviour
                 // This tile position is valid for this furniture
                 // Create a job for it to be build
 
-                Job j = new Job(t, furnitureType, (theJob) => {
+                Job j = new Job(t, furnitureType, (theJob) =>
+                {
                     WorldController.Instance.world.PlaceFurniture(furnitureType, theJob.tile);
 
                     // FIXME: I don't like having to manually and explicitly set
@@ -87,6 +102,15 @@ public class BuildModeController : MonoBehaviour
         {
             // We are in tile-changing mode.
             t.Type = buildModeTile;
+        }
+        if (buildMode == BuildMode.DECONSTRUCT)
+        {
+            // TODO
+            if (t.furniture != null)
+            {
+                t.furniture.Deconstruct();
+            }
+
         }
 
     }

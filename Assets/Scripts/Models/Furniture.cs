@@ -23,7 +23,8 @@ public class Furniture : IXmlSerializable
         }
     }
 
-
+    public int Width { get; protected set; }
+	public int Height { get; protected set; }
 
     // This represents the BASE tile of the object -- but in practice, large objects may actually occupy
     // multile tiles.
@@ -45,6 +46,8 @@ public class Furniture : IXmlSerializable
     // SPECIAL: If movementCost = 0, then this tile is impassible. (e.g. a wall).
     public float movementCost { get; protected set; }
 
+    public Action<Furniture> cbOnRemoved;
+
     // For example, a sofa might be 3x2 (actual graphics only appear to cover the 3x1 area, but the extra row is for leg room.)
     int width;
     int height;
@@ -65,6 +68,8 @@ public class Furniture : IXmlSerializable
     public Furniture()
     {
         furnParameters = new Dictionary<string, float>();
+        this.Height = 1;
+        this.Width = 1;
     }
 
     // Copy Constructor
@@ -247,6 +252,34 @@ public class Furniture : IXmlSerializable
             } while (reader.ReadToNextSibling("Param"));
         }
     }
+    public void RegisterOnRemovedCallback(Action<Furniture> callbackFunc) {
+		cbOnRemoved += callbackFunc;
+	}
+
+	public void UnregisterOnRemovedCallback(Action<Furniture> callbackFunc) {
+		cbOnRemoved -= callbackFunc;
+	}
+    
+    public void Deconstruct() {
+		Debug.Log("Deconstruct");
+
+        tile.world.furnitures.Remove(this);
+		tile.UnplaceFurniture();
+
+		if(cbOnRemoved != null)
+			cbOnRemoved(this);
+
+		// Do we need to recalculate our rooms?
+		// if(roomEnclosure) {
+		// 	Room.DoRoomFloodFill(this.tile);
+		// }
+
+		World.current.InvalidateTileGraph();
+
+		// At this point, no DATA structures should be pointing to us, so we
+		// should get garbage-collected.
+
+	}
 
 
 }

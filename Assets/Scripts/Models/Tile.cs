@@ -40,7 +40,7 @@ public class Tile : IXmlSerializable
     // Furniture is something like a wall, door, or sofa.
     public Furniture furniture
     {
-        get; protected set;
+        get;  set;
     }
 
     // FIXME: This seems like a terrible way to flag if a job is pending
@@ -48,10 +48,10 @@ public class Tile : IXmlSerializable
     public Job pendingFurnitureJob;
 
     // We need to know the context in which we exist. Probably. Maybe.
-    public World world { get; protected set; }
+    public World world { get;  set; }
 
-    public int X { get; protected set; }
-    public int Y { get; protected set; }
+    public int X { get;  set; }
+    public int Y { get;  set; }
 
     public float movementCost
     {
@@ -133,6 +133,27 @@ public class Tile : IXmlSerializable
             (diagOkay && (Mathf.Abs(this.X - tile.X) == 1 && Mathf.Abs(this.Y - tile.Y) == 1)) // Check diag adjacency
             ;
     }
+
+    public bool UnplaceFurniture() {
+		// Just uninstalling.  FIXME:  What if we have a multi-tile furniture?
+        Debug.Log("UnplaceFurniture called");
+
+		// if(furniture == null) 
+		// 	return false;
+
+		Furniture f = furniture;
+
+        Debug.Log("X="+X + " X+f.Wight=" + (X+f.Width));
+        Debug.Log("Y="+Y + " Y+f.Height="+ (X+f.Height));
+        Debug.Log(World.current.GetTileAt(X, Y));
+
+		Tile t = World.current.GetTileAt(X, Y);
+        //t = World.current.SetNullTileAt(x_off, y_off);
+        Debug.Log(t.furniture); 
+		t.furniture = null;
+        Debug.Log(t.furniture);
+		return true;
+	}
 
     /// <summary>
     /// Gets the neighbours.

@@ -47,6 +47,8 @@ public class FurnitureSpriteController : MonoBehaviour
         }
     }
 
+
+
     public void OnFurnitureCreated(Furniture furn)
     {
         //Debug.Log("OnFurnitureCreated");
@@ -62,11 +64,11 @@ public class FurnitureSpriteController : MonoBehaviour
 
         if (furn.objectType == "Lamp")
         {
-             Light light = furn_go.AddComponent<Light>();
-             light.color = Color.white;
-             //light.
-             furn_go.transform.position = new Vector3(furn.tile.X, furn.tile.Y, -1.0f);
-             //Debug.Log("Lamp coord " + furn_go.transform.position.x + " " + furn_go.transform.position.y + " " + furn_go.transform.position.z);
+            Light light = furn_go.AddComponent<Light>();
+            light.color = Color.white;
+            //light.
+            furn_go.transform.position = new Vector3(furn.tile.X, furn.tile.Y, -1.0f);
+            //Debug.Log("Lamp coord " + furn_go.transform.position.x + " " + furn_go.transform.position.y + " " + furn_go.transform.position.z);
         }
 
 
@@ -82,7 +84,7 @@ public class FurnitureSpriteController : MonoBehaviour
             // Check to see if we actually have a wall north/south, and if so
             // then rotate this GO by 90 degrees
 
-            
+
 
             Tile northTile = world.GetTileAt(furn.tile.X, furn.tile.Y + 1);
             Tile southTile = world.GetTileAt(furn.tile.X, furn.tile.Y - 1);
@@ -93,7 +95,7 @@ public class FurnitureSpriteController : MonoBehaviour
                 furn_go.transform.rotation = Quaternion.Euler(0, 0, 90);
                 furn_go.transform.Translate(1f, 0, 0, Space.World); // UGLY HACK TO COMPENSATE FOR BOTTOM_LEFT ANCHOR POINT!
 
-                
+
             }
         }
 
@@ -114,7 +116,21 @@ public class FurnitureSpriteController : MonoBehaviour
         // Register our callback so that our GameObject gets updated whenever
         // the object's into changes.
         furn.RegisterOnChangedCallback(OnFurnitureChanged);
+        furn.RegisterOnRemovedCallback(OnFurnitureRemoved);
 
+    }
+
+    void OnFurnitureRemoved(Furniture furniture)
+    {
+        if (furnitureGameObjectMap.ContainsKey(furniture) == false)
+        {
+            Debug.LogError("OnFurnitureRemoved -- trying to change visuals for furniture not in our map.");
+            return;
+        }
+
+        GameObject furn_go = furnitureGameObjectMap[furniture];
+        Destroy(furn_go);
+        furnitureGameObjectMap.Remove(furniture);
     }
 
     void OnFurnitureChanged(Furniture furn)

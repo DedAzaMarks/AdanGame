@@ -13,6 +13,8 @@ public class World : IXmlSerializable
     public List<Character> characters;
     public List<Furniture> furnitures;
 
+    static public World current { get; protected set; }
+
     // The pathfinding graph used to navigate our world map.
     public Path_TileGraph tileGraph;
 
@@ -50,6 +52,7 @@ public class World : IXmlSerializable
 
     void SetupWorld(int width, int height)
     {
+        current = this;
         jobQueue = new JobQueue();
 
         Width = width;
@@ -148,6 +151,7 @@ public class World : IXmlSerializable
                 false
             )
         );
+        
 
         // What if the object behaviours were scriptable? And therefore were part of the text file
         // we are reading in now?
@@ -227,6 +231,11 @@ public class World : IXmlSerializable
             //Debug.LogError("Tile ("+x+","+y+") is out of range.");
             return null;
         }
+        return tiles[x, y];
+    }
+
+    public Tile SetNullTileAt(int x, int y){
+        tiles[x, y].furniture = null;
         return tiles[x, y];
     }
 

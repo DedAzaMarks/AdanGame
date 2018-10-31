@@ -15,6 +15,12 @@ public class MouseController : MonoBehaviour
     Vector3 dragStartPosition;
     List<GameObject> dragPreviewGameObjects;
 
+
+    enum MouseMode {
+		SELECT,
+		BUILD
+	}
+	MouseMode currentMode = MouseMode.SELECT;
     // Use this for initialization
     void Start()
     {
@@ -136,5 +142,7 @@ public class MouseController : MonoBehaviour
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
     }
 
-
+    public void StartBuildMode() {
+		currentMode = MouseMode.BUILD;
+	}
 }
