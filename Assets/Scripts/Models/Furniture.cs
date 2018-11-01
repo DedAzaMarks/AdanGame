@@ -112,7 +112,7 @@ public class Furniture : IXmlSerializable
     {
         if (proto.funcPositionValidation(tile) == false)
         {
-            Debug.LogError("PlaceInstance -- Position Validity Function returned FALSE.");
+            //Debug.LogError("PlaceInstance -- Position Validity Function returned FALSE.");
             return null;
         }
 
@@ -171,12 +171,12 @@ public class Furniture : IXmlSerializable
 
     public void RegisterOnChangedCallback(Action<Furniture> callbackFunc)
     {
-        cbOnChanged += callbackFunc;
+        cbOnChanged = cbOnChanged + callbackFunc;
     }
 
     public void UnregisterOnChangedCallback(Action<Furniture> callbackFunc)
     {
-        cbOnChanged -= callbackFunc;
+        cbOnChanged = cbOnChanged - callbackFunc;
     }
 
     public bool IsValidPosition(Tile t)
@@ -253,11 +253,11 @@ public class Furniture : IXmlSerializable
         }
     }
     public void RegisterOnRemovedCallback(Action<Furniture> callbackFunc) {
-		cbOnRemoved += callbackFunc;
+		cbOnRemoved = cbOnRemoved + callbackFunc;
 	}
 
 	public void UnregisterOnRemovedCallback(Action<Furniture> callbackFunc) {
-		cbOnRemoved -= callbackFunc;
+		cbOnRemoved = cbOnRemoved - callbackFunc;
 	}
     
     public void Deconstruct() {

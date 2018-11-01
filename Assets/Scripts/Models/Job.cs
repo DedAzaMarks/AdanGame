@@ -23,33 +23,33 @@ public class Job
     {
         this.tile = tile;
         this.jobObjectType = jobObjectType;
-        this.cbJobComplete += cbJobComplete;
+        this.cbJobComplete = this.cbJobComplete + cbJobComplete;
         this.jobTime = jobTime;
     }
 
     public void RegisterJobCompleteCallback(Action<Job> cb)
     {
-        cbJobComplete += cb;
+        cbJobComplete = cbJobComplete + cb;
     }
 
     public void RegisterJobCancelCallback(Action<Job> cb)
     {
-        cbJobCancel += cb;
+        cbJobCancel = cbJobCancel + cb;
     }
 
     public void UnregisterJobCompleteCallback(Action<Job> cb)
     {
-        cbJobComplete -= cb;
+        cbJobComplete = cbJobComplete - cb;
     }
 
     public void UnregisterJobCancelCallback(Action<Job> cb)
     {
-        cbJobCancel -= cb;
+        cbJobCancel = cbJobCancel - cb;
     }
 
     public void DoWork(float workTime)
     {
-        jobTime -= workTime;
+        jobTime = jobTime - workTime;
 
         if (jobTime <= 0)
         {

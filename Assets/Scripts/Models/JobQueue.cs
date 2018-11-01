@@ -33,12 +33,12 @@ public class JobQueue
 
     public void RegisterJobCreationCallback(Action<Job> cb)
     {
-        cbJobCreated += cb;
+        cbJobCreated = cbJobCreated + cb;
     }
 
     public void UnregisterJobCreationCallback(Action<Job> cb)
     {
-        cbJobCreated -= cb;
+        cbJobCreated = cbJobCreated - cb;
     }
 
 }

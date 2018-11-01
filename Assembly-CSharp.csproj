@@ -53,7 +53,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\GameQuit.cs" />
      <Compile Include="Assets\Scripts\AdditionalOptions\ChangeMaterial.cs" />
+     <Compile Include="Assets\Scripts\AdditionalOptions\CSharpScript.cs" />
      <Compile Include="Assets\Scripts\Controllers\BackgroundController.cs" />
      <Compile Include="Assets\Scripts\Controllers\BuildModeController.cs" />
      <Compile Include="Assets\Scripts\Controllers\CharacterSpriteController.cs" />

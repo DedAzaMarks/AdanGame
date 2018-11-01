@@ -107,7 +107,7 @@ public class Character : IXmlSerializable
                 pathAStar = new Path_AStar(currTile.world, currTile, destTile); // This will calculate a path from curr to dest.
                 if (pathAStar.Length() == 0)
                 {
-                    Debug.LogError("Path_AStar returned no path to destination!");
+                    //Debug.LogError("Path_AStar returned no path to destination!");
                     AbandonJob();
                     pathAStar = null;
                     return;
@@ -124,7 +124,7 @@ public class Character : IXmlSerializable
 
             if (nextTile == currTile)
             {
-                Debug.LogError("Update_DoMovement - nextTile is currTile?");
+                //Debug.LogError("Update_DoMovement - nextTile is currTile?");
             }
         }
 
@@ -150,7 +150,7 @@ public class Character : IXmlSerializable
             //		  so that we don't waste a bunch of time walking towards a dead end.
             //		  To save CPU, maybe we can only check every so often?
             //		  Or maybe we should register a callback to the OnTileChanged event?
-            Debug.LogError("FIXME: A character was trying to enter an unwalkable tile.");
+            //Debug.LogError("FIXME: A character was trying to enter an unwalkable tile.");
             nextTile = null;    // our next tile is a no-go
             pathAStar = null;   // clearly our pathfinding info is out of date.
             return;
@@ -171,7 +171,7 @@ public class Character : IXmlSerializable
         float percThisFrame = distThisFrame / distToTravel;
 
         // Add that to overall percentage travelled.
-        movementPercentage += percThisFrame;
+        movementPercentage = movementPercentage + percThisFrame;
 
         if (movementPercentage >= 1)
         {
@@ -214,12 +214,12 @@ public class Character : IXmlSerializable
 
     public void RegisterOnChangedCallback(Action<Character> cb)
     {
-        cbCharacterChanged += cb;
+        cbCharacterChanged = cbCharacterChanged + cb;
     }
 
     public void UnregisterOnChangedCallback(Action<Character> cb)
     {
-        cbCharacterChanged -= cb;
+        cbCharacterChanged = cbCharacterChanged - cb;
     }
 
     void OnJobEnded(Job j)
@@ -228,7 +228,7 @@ public class Character : IXmlSerializable
 
         if (j != myJob)
         {
-            Debug.LogError("Character being told about job that isn't his. You forgot to unregister something.");
+            //Debug.LogError("Character being told about job that isn't his. You forgot to unregister something.");
             return;
         }
 

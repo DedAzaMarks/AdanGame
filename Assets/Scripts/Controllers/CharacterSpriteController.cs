@@ -91,7 +91,7 @@ public class CharacterSpriteController : MonoBehaviour
 
         if (characterGameObjectMap.ContainsKey(c) == false)
         {
-            Debug.LogError("OnCharacterChanged -- trying to change visuals for character not in our map.");
+            //Debug.LogError("OnCharacterChanged -- trying to change visuals for character not in our map.");
             return;
         }
 

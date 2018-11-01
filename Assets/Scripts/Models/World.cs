@@ -151,14 +151,44 @@ public class World : IXmlSerializable
                 false
             )
         );
-        
+
+        furniturePrototypes.Add("Shelf",
+            new Furniture(
+                "Shelf",
+                0,
+                1,
+                1,
+                false
+            )
+        );
+
+        furniturePrototypes.Add("Table",
+            new Furniture(
+                "Table",
+                0,
+                1,
+                1,
+                false
+            )
+        );
+
+        furniturePrototypes.Add("Fridge",
+            new Furniture(
+                "Fridge",
+                0,
+                1,
+                1,
+                false
+            )
+        );
+
 
         // What if the object behaviours were scriptable? And therefore were part of the text file
         // we are reading in now?
 
         furniturePrototypes["Door"].furnParameters["openness"] = 0;
         furniturePrototypes["Door"].furnParameters["is_opening"] = 0;
-        furniturePrototypes["Door"].updateActions += FurnitureActions.Door_UpdateAction;
+        furniturePrototypes["Door"].updateActions = furniturePrototypes["Door"].updateActions + FurnitureActions.Door_UpdateAction;
 
         furniturePrototypes["Door"].IsEnterable = FurnitureActions.Door_IsEnterable;
     }
@@ -247,7 +277,7 @@ public class World : IXmlSerializable
 
         if (furniturePrototypes.ContainsKey(objectType) == false)
         {
-            Debug.LogError("furniturePrototypes doesn't contain a proto for key: " + objectType);
+            //Debug.LogError("furniturePrototypes doesn't contain a proto for key: " + objectType);
             return null;
         }
 
@@ -272,32 +302,32 @@ public class World : IXmlSerializable
 
     public void RegisterFurnitureCreated(Action<Furniture> callbackfunc)
     {
-        cbFurnitureCreated += callbackfunc;
+        cbFurnitureCreated = callbackfunc + cbFurnitureCreated;
     }
 
     public void UnregisterFurnitureCreated(Action<Furniture> callbackfunc)
     {
-        cbFurnitureCreated -= callbackfunc;
+        cbFurnitureCreated = cbFurnitureCreated - callbackfunc;
     }
 
     public void RegisterCharacterCreated(Action<Character> callbackfunc)
     {
-        cbCharacterCreated += callbackfunc;
+        cbCharacterCreated = cbCharacterCreated + callbackfunc;
     }
 
     public void UnregisterCharacterCreated(Action<Character> callbackfunc)
     {
-        cbCharacterCreated -= callbackfunc;
+        cbCharacterCreated = cbCharacterCreated - callbackfunc;
     }
 
     public void RegisterTileChanged(Action<Tile> callbackfunc)
     {
-        cbTileChanged += callbackfunc;
+        cbTileChanged = cbTileChanged + callbackfunc;
     }
 
     public void UnregisterTileChanged(Action<Tile> callbackfunc)
     {
-        cbTileChanged -= callbackfunc;
+        cbTileChanged = cbTileChanged - callbackfunc;
     }
 
     // Gets called whenever ANY tile changes
@@ -327,7 +357,7 @@ public class World : IXmlSerializable
     {
         if (furniturePrototypes.ContainsKey(objectType) == false)
         {
-            Debug.LogError("No furniture with type: " + objectType);
+            //Debug.LogError("No furniture with type: " + objectType);
             return null;
         }
 

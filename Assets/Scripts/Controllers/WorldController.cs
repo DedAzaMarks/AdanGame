@@ -21,7 +21,7 @@ public class WorldController : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("There should never be two world controllers.");
+            //Debug.LogError("There should never be two world controllers.");
         }
         Instance = this;
 

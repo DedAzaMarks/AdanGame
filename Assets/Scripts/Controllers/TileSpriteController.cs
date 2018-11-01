@@ -90,7 +90,7 @@ public class TileSpriteController : MonoBehaviour
 
         if (tileGameObjectMap.ContainsKey(tile_data) == false)
         {
-            Debug.LogError("tileGameObjectMap doesn't contain the tile_data -- did you forget to add the tile to the dictionary? Or maybe forget to unregister a callback?");
+            //Debug.LogError("tileGameObjectMap doesn't contain the tile_data -- did you forget to add the tile to the dictionary? Or maybe forget to unregister a callback?");
             return;
         }
 
@@ -98,7 +98,7 @@ public class TileSpriteController : MonoBehaviour
 
         if (tile_go == null)
         {
-            Debug.LogError("tileGameObjectMap's returned GameObject is null -- did you forget to add the tile to the dictionary? Or maybe forget to unregister a callback?");
+            //Debug.LogError("tileGameObjectMap's returned GameObject is null -- did you forget to add the tile to the dictionary? Or maybe forget to unregister a callback?");
             return;
         }
 
@@ -112,7 +112,7 @@ public class TileSpriteController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("OnTileTypeChanged - Unrecognized tile type.");
+            //Debug.LogError("OnTileTypeChanged - Unrecognized tile type.");
         }
 
 

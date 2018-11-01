@@ -16,7 +16,7 @@ public class SoundController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        soundCooldown -= Time.deltaTime;
+        soundCooldown = soundCooldown - Time.deltaTime;
     }
 
     void OnTileChanged(Tile tile_data)

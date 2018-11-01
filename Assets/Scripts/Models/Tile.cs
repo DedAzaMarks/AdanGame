@@ -89,7 +89,7 @@ public class Tile : IXmlSerializable
     /// </summary>
     public void RegisterTileTypeChangedCallback(Action<Tile> callback)
     {
-        cbTileChanged += callback;
+        cbTileChanged = cbTileChanged + callback;
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class Tile : IXmlSerializable
     /// </summary>
     public void UnregisterTileTypeChangedCallback(Action<Tile> callback)
     {
-        cbTileChanged -= callback;
+        cbTileChanged = cbTileChanged - callback;
     }
 
     public bool PlaceFurniture(Furniture objInstance)
@@ -113,7 +113,7 @@ public class Tile : IXmlSerializable
 
         if (furniture != null)
         {
-            Debug.LogError("Trying to assign a furniture to a tile that already has one!");
+            //Debug.LogError("Trying to assign a furniture to a tile that already has one!");
             return false;
         }
 

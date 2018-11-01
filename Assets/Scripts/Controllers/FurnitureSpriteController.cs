@@ -124,7 +124,7 @@ public class FurnitureSpriteController : MonoBehaviour
     {
         if (furnitureGameObjectMap.ContainsKey(furniture) == false)
         {
-            Debug.LogError("OnFurnitureRemoved -- trying to change visuals for furniture not in our map.");
+            //Debug.LogError("OnFurnitureRemoved -- trying to change visuals for furniture not in our map.");
             return;
         }
 
@@ -140,7 +140,7 @@ public class FurnitureSpriteController : MonoBehaviour
 
         if (furnitureGameObjectMap.ContainsKey(furn) == false)
         {
-            Debug.LogError("OnFurnitureChanged -- trying to change visuals for furniture not in our map.");
+            //Debug.LogError("OnFurnitureChanged -- trying to change visuals for furniture not in our map.");
             return;
         }
 
@@ -208,22 +208,22 @@ public class FurnitureSpriteController : MonoBehaviour
         t = world.GetTileAt(x, y + 1);
         if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
         {
-            spriteName += "N";
+            spriteName = spriteName + "N";
         }
         t = world.GetTileAt(x + 1, y);
         if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
         {
-            spriteName += "E";
+            spriteName = spriteName + "E";
         }
         t = world.GetTileAt(x, y - 1);
         if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
         {
-            spriteName += "S";
+            spriteName = spriteName + "S";
         }
         t = world.GetTileAt(x - 1, y);
         if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
         {
-            spriteName += "W";
+            spriteName = spriteName + "W";
         }
 
         // For example, if this object has all four neighbours of
@@ -232,7 +232,7 @@ public class FurnitureSpriteController : MonoBehaviour
 
         if (furnitureSprites.ContainsKey(spriteName) == false)
         {
-            Debug.LogError("GetSpriteForInstalledObject -- No sprites with name: " + spriteName);
+            //Debug.LogError("GetSpriteForInstalledObject -- No sprites with name: " + spriteName);
             return null;
         }
 
@@ -254,7 +254,7 @@ public class FurnitureSpriteController : MonoBehaviour
             return furnitureSprites[objectType + "_"];
         }
 
-        Debug.LogError("GetSpriteForFurniture -- No sprites with name: " + objectType);
+        //Debug.LogError("GetSpriteForFurniture -- No sprites with name: " + objectType);
         return null;
     }
 }

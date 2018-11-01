@@ -10,7 +10,7 @@ public static class FurnitureActions
 
         if (furn.furnParameters["is_opening"] >= 1)
         {
-            furn.furnParameters["openness"] += deltaTime * 4;   // FIXME: Maybe a door open speed parameter?
+            furn.furnParameters["openness"] = furn.furnParameters["openness"] + (deltaTime * 4);   // FIXME: Maybe a door open speed parameter?
             if (furn.furnParameters["openness"] >= 1)
             {
                 furn.furnParameters["is_opening"] = 0;
@@ -18,7 +18,7 @@ public static class FurnitureActions
         }
         else
         {
-            furn.furnParameters["openness"] -= deltaTime * 4;
+            furn.furnParameters["openness"] = furn.furnParameters["openness"] - (deltaTime * 4);
         }
 
         furn.furnParameters["openness"] = Mathf.Clamp01(furn.furnParameters["openness"]);
