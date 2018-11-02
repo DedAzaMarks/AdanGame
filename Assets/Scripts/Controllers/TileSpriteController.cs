@@ -8,55 +8,55 @@ public class TileSpriteController : MonoBehaviour
 
     // The only tile sprite we have right now, so this
     // it a pretty simple way to handle it.
-    public Sprite floorSprite;  // FIXME!
-    public Sprite emptySprite;  // FIXME!
+    public Sprite FloorSprite;  // FIXME!
+    public Sprite EmptySprite;  // FIXME!
 
-    Dictionary<Tile, GameObject> tileGameObjectMap;
+    Dictionary<Tile, GameObject> TileGameObjectMap;
 
-    World world
+    World World
     {
-        get { return WorldController.Instance.world; }
+        get { return WorldController.Instance.World; }
     }
 
     // Use this for initialization
     void Start()
     {
         // Instantiate our dictionary that tracks which GameObject is rendering which Tile data.
-        tileGameObjectMap = new Dictionary<Tile, GameObject>();
+        TileGameObjectMap = new Dictionary<Tile, GameObject>();
 
         // Create a GameObject for each of our tiles, so they show visually. (and redunt reduntantly)
-        for (int x = 0; x < world.Width; x++)
+        for (int x = 0; x < World.Width; x++)
         {
-            for (int y = 0; y < world.Height; y++)
+            for (int y = 0; y < World.Height; y++)
             {
                 // Get the tile data
-                Tile tile_data = world.GetTileAt(x, y);
+                Tile TileData = World.GetTileAt(x, y);
 
                 // This creates a new GameObject and adds it to our scene.
-                GameObject tile_go = new GameObject();
+                GameObject TileGo = new GameObject();
 
                 // Add our tile/GO pair to the dictionary.
-                tileGameObjectMap.Add(tile_data, tile_go);
+                TileGameObjectMap.Add(TileData, TileGo);
 
-                tile_go.name = "Tile_" + x + "_" + y;
-                tile_go.transform.position = new Vector3(tile_data.X, tile_data.Y, 0);
-                tile_go.transform.SetParent(this.transform, true);
+                TileGo.name = "Tile_" + x + "_" + y;
+                TileGo.transform.position = new Vector3(TileData.X, TileData.Y, 0);
+                TileGo.transform.SetParent(this.transform, true);
 
                 // Add a Sprite Renderer
                 // Add a default sprite for empty tiles.
-                SpriteRenderer sr = tile_go.AddComponent<SpriteRenderer>();
-                sr.sprite = emptySprite;
-                sr.sortingLayerName = "Tiles";
+                SpriteRenderer SR = TileGo.AddComponent<SpriteRenderer>();
+                SR.sprite = EmptySprite;
+                SR.sortingLayerName = "Tiles";
                 //if ( != )
-                sr.material = Resources.Load<Material>("Materials/FloorMaterial");
+                SR.material = Resources.Load<Material>("Materials/FloorMaterial");
 
-                OnTileChanged(tile_data);
+                OnTileChanged(TileData);
             }
         }
 
         // Register our callback so that our GameObject gets updated whenever
         // the tile's type changes.
-        world.RegisterTileChanged(OnTileChanged);
+        World.RegisterTileChanged(OnTileChanged);
     }
 
     // THIS IS AN EXAMPLE -- NOT CURRENTLY USED (and probably out of date)
@@ -65,19 +65,19 @@ public class TileSpriteController : MonoBehaviour
         // This function might get called when we are changing floors/levels.
         // We need to destroy all visual **GameObjects** -- but not the actual tile data!
 
-        while (tileGameObjectMap.Count > 0)
+        while (TileGameObjectMap.Count > 0)
         {
-            Tile tile_data = tileGameObjectMap.Keys.First();
-            GameObject tile_go = tileGameObjectMap[tile_data];
+            Tile tileData = TileGameObjectMap.Keys.First();
+            GameObject TileGo = TileGameObjectMap[tileData];
 
             // Remove the pair from the map
-            tileGameObjectMap.Remove(tile_data);
+            TileGameObjectMap.Remove(tileData);
 
             // Unregister the callback!
-            tile_data.UnregisterTileTypeChangedCallback(OnTileChanged);
+            tileData.UnregisterTileTypeChangedCallback(OnTileChanged);
 
             // Destroy the visual GameObject
-            Destroy(tile_go);
+            Destroy(TileGo);
         }
 
         // Presumably, after this function gets called, we'd be calling another
@@ -85,30 +85,30 @@ public class TileSpriteController : MonoBehaviour
     }
 
     // This function should be called automatically whenever a tile's data gets changed.
-    void OnTileChanged(Tile tile_data)
+    void OnTileChanged(Tile TileData)
     {
 
-        if (tileGameObjectMap.ContainsKey(tile_data) == false)
+        if (TileGameObjectMap.ContainsKey(TileData) == false)
         {
             //Debug.LogError("tileGameObjectMap doesn't contain the tile_data -- did you forget to add the tile to the dictionary? Or maybe forget to unregister a callback?");
             return;
         }
 
-        GameObject tile_go = tileGameObjectMap[tile_data];
+        GameObject TileGo = TileGameObjectMap[TileData];
 
-        if (tile_go == null)
+        if (TileGo == null)
         {
             //Debug.LogError("tileGameObjectMap's returned GameObject is null -- did you forget to add the tile to the dictionary? Or maybe forget to unregister a callback?");
             return;
         }
 
-        if (tile_data.Type == TileType.Floor)
+        if (TileData.Type == TileType.Floor)
         {
-            tile_go.GetComponent<SpriteRenderer>().sprite = floorSprite;
+            TileGo.GetComponent<SpriteRenderer>().sprite = FloorSprite;
         }
-        else if (tile_data.Type == TileType.Empty)
+        else if (TileData.Type == TileType.Empty)
         {
-            tile_go.GetComponent<SpriteRenderer>().sprite = emptySprite;
+            TileGo.GetComponent<SpriteRenderer>().sprite = EmptySprite;
         }
         else
         {

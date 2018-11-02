@@ -8,53 +8,53 @@ public enum BuildMode
 }
 public class BuildModeController : MonoBehaviour
 {
-    public BuildMode buildMode = BuildMode.FLOOR;
-    bool buildModeIsObjects = false;
-    TileType buildModeTile = TileType.Floor;
-    string buildModeObjectType;
+    public BuildMode BuildMode = BuildMode.FLOOR;
+    bool BuildModeIsObjects = false;
+    TileType BuildModeTile = TileType.Floor;
+    string BuildModeObjectType;
 
     // Use this for initialization
     void Start()
     {
     }
 
-    public void SetMode_BuildFloor()
+    public void SetModeBuildFloor()
     {
-        buildModeIsObjects = false;
-        buildModeTile = TileType.Floor;
+        BuildModeIsObjects = false;
+        BuildModeTile = TileType.Floor;
     }
 
-    public void SetMode_Bulldoze()
+    public void SetModeBulldoze()
     {
-        buildModeIsObjects = false;
-        buildModeTile = TileType.Empty;
+        BuildModeIsObjects = false;
+        BuildModeTile = TileType.Empty;
     }
 
-    public void SetMode_BuildFurniture(string objectType)
+    public void SetModeBuildFurniture(string objectType)
     {
         // Wall is not a Tile!  Wall is an "Furniture" that exists on TOP of a tile.
-        buildModeIsObjects = true;
-        buildModeObjectType = objectType;
+        BuildModeIsObjects = true;
+        BuildModeObjectType = objectType;
     }
 
-    public void SetMode_BulldozeFurniture()
+    public void SetModeBulldozeFurniture()
     {
 
-        buildMode = BuildMode.DECONSTRUCT;
+        BuildMode = BuildMode.DECONSTRUCT;
         GameObject.FindObjectOfType<MouseController>().StartBuildMode();
 
     }
 
     public void DoPathfindingTest()
     {
-        WorldController.Instance.world.SetupPathfindingExample();
+        WorldController.Instance.World.SetupPathfindingExample();
 
-        Path_TileGraph tileGraph = new Path_TileGraph(WorldController.Instance.world);
+        PathTileGraph tileGraph = new PathTileGraph(WorldController.Instance.World);
     }
 
     public void DoBuild(Tile t)
     {
-        if (buildModeIsObjects == true)
+        if (BuildModeIsObjects == true)
         {
             // Create the Furniture and assign it to the tile
 
@@ -64,11 +64,11 @@ public class BuildModeController : MonoBehaviour
             // Can we build the furniture in the selected tile?
             // Run the ValidPlacement function!
 
-            string furnitureType = buildModeObjectType;
+            string furnitureType = BuildModeObjectType;
 
             if (
-                WorldController.Instance.world.IsFurniturePlacementValid(furnitureType, t) &&
-                t.pendingFurnitureJob == null
+                WorldController.Instance.World.IsFurniturePlacementValid(furnitureType, t) &&
+                t.PendingFurnitureJob == null
             )
             {
                 // This tile position is valid for this furniture
@@ -76,35 +76,35 @@ public class BuildModeController : MonoBehaviour
 
                 Job j = new Job(t, furnitureType, (theJob) =>
                 {
-                    WorldController.Instance.world.PlaceFurniture(furnitureType, theJob.tile);
+                    WorldController.Instance.World.PlaceFurniture(furnitureType, theJob.Tile);
 
                     // FIXME: I don't like having to manually and explicitly set
                     // flags that preven conflicts. It's too easy to forget to set/clear them!
-                    t.pendingFurnitureJob = null;
+                    t.PendingFurnitureJob = null;
                 }
                 );
 
 
                 // FIXME: I don't like having to manually and explicitly set
                 // flags that preven conflicts. It's too easy to forget to set/clear them!
-                t.pendingFurnitureJob = j;
-                j.RegisterJobCancelCallback((theJob) => { theJob.tile.pendingFurnitureJob = null; });
+                t.PendingFurnitureJob = j;
+                j.RegisterJobCancelCallback((theJob) => { theJob.Tile.PendingFurnitureJob = null; });
 
                 // Add the job to the queue
-                WorldController.Instance.world.jobQueue.Enqueue(j);
+                WorldController.Instance.World.MyJobQueue.Enqueue(j);
             }
         }
         else
         {
             // We are in tile-changing mode.
-            t.Type = buildModeTile;
+            t.Type = BuildModeTile;
         }
-        if (buildMode == BuildMode.DECONSTRUCT)
+        if (BuildMode == BuildMode.DECONSTRUCT)
         {
             // TODO
-            if (t.furniture != null)
+            if (t.Furniture != null)
             {
-                t.furniture.Deconstruct();
+                t.Furniture.Deconstruct();
             }
 
         }

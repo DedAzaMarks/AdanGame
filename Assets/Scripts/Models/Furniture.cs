@@ -103,7 +103,7 @@ public class Furniture : IXmlSerializable
         this.height = height;
         this.linksToNeighbour = linksToNeighbour;
 
-        this.funcPositionValidation = this.__IsValidPosition;
+        this.funcPositionValidation = this.CheckIsValidPosition;
 
         furnParameters = new Dictionary<string, float>();
     }
@@ -142,26 +142,26 @@ public class Furniture : IXmlSerializable
             int y = tile.Y;
 
             t = tile.world.GetTileAt(x, y + 1);
-            if (t != null && t.furniture != null && t.furniture.cbOnChanged != null && t.furniture.objectType == obj.objectType)
+            if (t != null && t.Furniture != null && t.Furniture.cbOnChanged != null && t.Furniture.objectType == obj.objectType)
             {
                 // We have a Northern Neighbour with the same object type as us, so
                 // tell it that it has changed by firing is callback.
-                t.furniture.cbOnChanged(t.furniture);
+                t.Furniture.cbOnChanged(t.Furniture);
             }
             t = tile.world.GetTileAt(x + 1, y);
-            if (t != null && t.furniture != null && t.furniture.cbOnChanged != null && t.furniture.objectType == obj.objectType)
+            if (t != null && t.Furniture != null && t.Furniture.cbOnChanged != null && t.Furniture.objectType == obj.objectType)
             {
-                t.furniture.cbOnChanged(t.furniture);
+                t.Furniture.cbOnChanged(t.Furniture);
             }
             t = tile.world.GetTileAt(x, y - 1);
-            if (t != null && t.furniture != null && t.furniture.cbOnChanged != null && t.furniture.objectType == obj.objectType)
+            if (t != null && t.Furniture != null && t.Furniture.cbOnChanged != null && t.Furniture.objectType == obj.objectType)
             {
-                t.furniture.cbOnChanged(t.furniture);
+                t.Furniture.cbOnChanged(t.Furniture);
             }
             t = tile.world.GetTileAt(x - 1, y);
-            if (t != null && t.furniture != null && t.furniture.cbOnChanged != null && t.furniture.objectType == obj.objectType)
+            if (t != null && t.Furniture != null && t.Furniture.cbOnChanged != null && t.Furniture.objectType == obj.objectType)
             {
-                t.furniture.cbOnChanged(t.furniture);
+                t.Furniture.cbOnChanged(t.Furniture);
             }
 
         }
@@ -186,7 +186,7 @@ public class Furniture : IXmlSerializable
 
     // FIXME: These functions should never be called directly,
     // so they probably shouldn't be public functions of Furniture
-    public bool __IsValidPosition(Tile t)
+    public bool CheckIsValidPosition(Tile t)
     {
         // Make sure tile is FLOOR
         if (t.Type != TileType.Floor)
@@ -195,7 +195,7 @@ public class Furniture : IXmlSerializable
         }
 
         // Make sure tile doesn't already have furniture
-        if (t.furniture != null)
+        if (t.Furniture != null)
         {
             return false;
         }
@@ -203,9 +203,9 @@ public class Furniture : IXmlSerializable
         return true;
     }
 
-    public bool __IsValidPosition_Door(Tile t)
+    public bool CheckIsValidPositionForDoor(Tile t)
     {
-        if (__IsValidPosition(t) == false)
+        if (CheckIsValidPosition(t) == false)
             return false;
 
         // Make sure we have a pair of E/W walls or N/S walls
@@ -263,7 +263,7 @@ public class Furniture : IXmlSerializable
     public void Deconstruct() {
 		Debug.Log("Deconstruct");
 
-        tile.world.furnitures.Remove(this);
+        tile.world.Furnitures.Remove(this);
 		tile.UnplaceFurniture();
 
 		if(cbOnRemoved != null)
@@ -274,7 +274,7 @@ public class Furniture : IXmlSerializable
 		// 	Room.DoRoomFloodFill(this.tile);
 		// }
 
-		World.current.InvalidateTileGraph();
+		World.Current.InvalidateTileGraph();
 
 		// At this point, no DATA structures should be pointing to us, so we
 		// should get garbage-collected.

@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 public class MouseController : MonoBehaviour
 {
 
-    public GameObject circleCursorPrefab;
+    public GameObject CircleCursorPrefab;
 
     // The world-position of the mouse last frame.
-    Vector3 lastFramePosition;
-    Vector3 currFramePosition;
+    Vector3 LastFramePosition;
+    Vector3 CurrFramePosition;
 
     // The world-position start of our left-mouse drag operation
     Vector3 dragStartPosition;
@@ -30,8 +30,8 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currFramePosition.z = 0;
+        CurrFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        CurrFramePosition.z = 0;
 
         //UpdateCursor();
         UpdateDragging();
@@ -39,8 +39,8 @@ public class MouseController : MonoBehaviour
 
         // Save the mouse position from this frame
         // We don't use currFramePosition because we may have moved the camera.
-        lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        lastFramePosition.z = 0;
+        LastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        LastFramePosition.z = 0;
     }
 
     void UpdateDragging()
@@ -54,26 +54,26 @@ public class MouseController : MonoBehaviour
         // Start Drag
         if (Input.GetMouseButtonDown(0))
         {
-            dragStartPosition = currFramePosition;
+            dragStartPosition = CurrFramePosition;
         }
 
-        int start_x = Mathf.FloorToInt(dragStartPosition.x);
-        int end_x = Mathf.FloorToInt(currFramePosition.x);
-        int start_y = Mathf.FloorToInt(dragStartPosition.y);
-        int end_y = Mathf.FloorToInt(currFramePosition.y);
+        int StartX = Mathf.FloorToInt(dragStartPosition.x);
+        int EndX = Mathf.FloorToInt(CurrFramePosition.x);
+        int StartY = Mathf.FloorToInt(dragStartPosition.y);
+        int EndY = Mathf.FloorToInt(CurrFramePosition.y);
 
         // We may be dragging in the "wrong" direction, so flip things if needed.
-        if (end_x < start_x)
+        if (EndX < StartX)
         {
-            int tmp = end_x;
-            end_x = start_x;
-            start_x = tmp;
+            int tmp = EndX;
+            EndX = StartX;
+            StartX = tmp;
         }
-        if (end_y < start_y)
+        if (EndY < StartY)
         {
-            int tmp = end_y;
-            end_y = start_y;
-            start_y = tmp;
+            int tmp = EndY;
+            EndY = StartY;
+            StartY = tmp;
         }
 
         // Clean up old drag previews
@@ -87,17 +87,17 @@ public class MouseController : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             // Display a preview of the drag area
-            for (int x = start_x; x <= end_x; x++)
+            for (int x = StartX; x <= EndX; x++)
             {
-                for (int y = start_y; y <= end_y; y++)
+                for (int y = StartY; y <= EndY; y++)
                 {
-                    Tile t = WorldController.Instance.world.GetTileAt(x, y);
+                    Tile t = WorldController.Instance.World.GetTileAt(x, y);
                     if (t != null)
                     {
                         // Display the building hint on top of this tile position
-                        GameObject go = SimplePool.Spawn(circleCursorPrefab, new Vector3(x, y, 0), Quaternion.identity);
-                        go.transform.SetParent(this.transform, true);
-                        dragPreviewGameObjects.Add(go);
+                        GameObject GO = SimplePool.Spawn(CircleCursorPrefab, new Vector3(x, y, 0), Quaternion.identity);
+                        GO.transform.SetParent(this.transform, true);
+                        dragPreviewGameObjects.Add(GO);
                     }
                 }
             }
@@ -107,19 +107,19 @@ public class MouseController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
 
-            BuildModeController bmc = GameObject.FindObjectOfType<BuildModeController>();
+            BuildModeController BMC = GameObject.FindObjectOfType<BuildModeController>();
 
             // Loop through all the tiles
-            for (int x = start_x; x <= end_x; x++)
+            for (int x = StartX; x <= EndX; x++)
             {
-                for (int y = start_y; y <= end_y; y++)
+                for (int y = StartY; y <= EndY; y++)
                 {
-                    Tile t = WorldController.Instance.world.GetTileAt(x, y);
+                    Tile t = WorldController.Instance.World.GetTileAt(x, y);
 
                     if (t != null)
                     {
                         // Call BuildModeController::DoBuild()
-                        bmc.DoBuild(t);
+                        BMC.DoBuild(t);
                     }
                 }
             }
@@ -132,7 +132,7 @@ public class MouseController : MonoBehaviour
         if (Input.GetMouseButton(1) || Input.GetMouseButton(2))
         {   // Right or Middle Mouse Button
 
-            Vector3 diff = lastFramePosition - currFramePosition;
+            Vector3 diff = LastFramePosition - CurrFramePosition;
             Camera.main.transform.Translate(diff);
 
         }

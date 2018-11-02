@@ -347,8 +347,9 @@
     <Compile Include="C:\Users\пользователь\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.standardevents@1.0.13\Editor\Importer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Scripts\Utilities\Priority_Queue\GITHUB PAGE.txt" />
-    <None Include="Assets\Scripts\Utilities\Priority_Queue\LICENSE.txt" />
+    <None Include="Assets\LICENSE.txt" />
+    <None Include="Assets\Scripts\Utilities\PriorityQueue\GITHUB PAGE.txt" />
+    <None Include="Assets\Scripts\Utilities\PriorityQueue\LICENSE.txt" />
     <None Include="Assets\UI\Kenney Assets\License.txt" />
     <None Include="C:\Users\пользователь\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Dark.uss" />
     <None Include="C:\Users\пользователь\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Light.uss" />

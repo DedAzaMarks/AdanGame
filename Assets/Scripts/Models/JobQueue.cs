@@ -4,41 +4,41 @@ using System;
 
 public class JobQueue
 {
-    Queue<Job> jobQueue;
+    Queue<Job> MyJobQueue;
 
-    Action<Job> cbJobCreated;
+    Action<Job> CbJobCreated;
 
     public JobQueue()
     {
-        jobQueue = new Queue<Job>();
+        MyJobQueue = new Queue<Job>();
     }
 
     public void Enqueue(Job j)
     {
-        jobQueue.Enqueue(j);
+        MyJobQueue.Enqueue(j);
 
-        if (cbJobCreated != null)
+        if (CbJobCreated != null)
         {
-            cbJobCreated(j);
+            CbJobCreated(j);
         }
     }
 
     public Job Dequeue()
     {
-        if (jobQueue.Count == 0)
+        if (MyJobQueue.Count == 0)
             return null;
         
-        return jobQueue.Dequeue();
+        return MyJobQueue.Dequeue();
     }
 
     public void RegisterJobCreationCallback(Action<Job> cb)
     {
-        cbJobCreated = cbJobCreated + cb;
+        CbJobCreated = CbJobCreated + cb;
     }
 
     public void UnregisterJobCreationCallback(Action<Job> cb)
     {
-        cbJobCreated = cbJobCreated - cb;
+        CbJobCreated = CbJobCreated - cb;
     }
 
 }

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 public class CharacterSpriteController : MonoBehaviour
 {
 
-    Dictionary<Character, GameObject> characterGameObjectMap;
+    Dictionary<Character, GameObject> CharacterGameObjectMap;
 
-    Dictionary<string, Sprite> characterSprites;
+    Dictionary<string, Sprite> CharacterSprites;
 
-    World world
+    World World
     {
-        get { return WorldController.Instance.world; }
+        get { return WorldController.Instance.World; }
     }
 
     // Use this for initialization
@@ -19,14 +19,14 @@ public class CharacterSpriteController : MonoBehaviour
         LoadSprites();
 
         // Instantiate our dictionary that tracks which GameObject is rendering which Tile data.
-        characterGameObjectMap = new Dictionary<Character, GameObject>();
+        CharacterGameObjectMap = new Dictionary<Character, GameObject>();
 
         // Register our callback so that our GameObject gets updated whenever
         // the tile's type changes.
-        world.RegisterCharacterCreated(OnCharacterCreated);
+        World.RegisterCharacterCreated(OnCharacterCreated);
 
         // Check for pre-existing characters, which won't do the callback.
-        foreach (Character c in world.characters)
+        foreach (Character c in World.Characters)
         {
             OnCharacterCreated(c);
         }
@@ -37,14 +37,14 @@ public class CharacterSpriteController : MonoBehaviour
 
     void LoadSprites()
     {
-        characterSprites = new Dictionary<string, Sprite>();
-        Sprite[] sprites = Resources.LoadAll<Sprite>("Images/Characters/");
+        CharacterSprites = new Dictionary<string, Sprite>();
+        Sprite[] Sprites = Resources.LoadAll<Sprite>("Images/Characters/");
 
         //Debug.Log("LOADED RESOURCE:");
-        foreach (Sprite s in sprites)
+        foreach (Sprite s in Sprites)
         {
             //Debug.Log(s);
-            characterSprites[s.name] = s;
+            CharacterSprites[s.name] = s;
         }
     }
 
@@ -56,7 +56,7 @@ public class CharacterSpriteController : MonoBehaviour
         // FIXME: Does not consider multi-tile objects nor rotated objects
 
         // This creates a new GameObject and adds it to our scene.
-        GameObject char_go = new GameObject();
+        GameObject CharGo = new GameObject();
 
 
         //IMPORTANT ONE
@@ -65,15 +65,15 @@ public class CharacterSpriteController : MonoBehaviour
         //material = char_go.AddComponent<Material>();
 
         // Add our tile/GO pair to the dictionary.
-        characterGameObjectMap.Add(c, char_go);
+        CharacterGameObjectMap.Add(c, CharGo);
 
-        char_go.name = "Character";
-        char_go.transform.position = new Vector3(c.X, c.Y, 0);
+        CharGo.name = "Character";
+        CharGo.transform.position = new Vector3(c.X, c.Y, 0);
         
 
-        SpriteRenderer sr = char_go.AddComponent<SpriteRenderer>();
-        sr.sprite = characterSprites["p1_front"];
-        sr.sortingLayerName = "Characters";
+        SpriteRenderer SR = CharGo.AddComponent<SpriteRenderer>();
+        SR.sprite = CharacterSprites["p1_front"];
+        SR.sortingLayerName = "Characters";
 
         // Material material = char_go.GetComponent<Renderer>().material;
         // material.shader = Shader.Find("Diffuse");
@@ -89,19 +89,19 @@ public class CharacterSpriteController : MonoBehaviour
         //Debug.Log("OnFurnitureChanged");
         // Make sure the furniture's graphics are correct.
 
-        if (characterGameObjectMap.ContainsKey(c) == false)
+        if (CharacterGameObjectMap.ContainsKey(c) == false)
         {
             //Debug.LogError("OnCharacterChanged -- trying to change visuals for character not in our map.");
             return;
         }
 
-        GameObject char_go = characterGameObjectMap[c];
+        GameObject CharGo = CharacterGameObjectMap[c];
         //Debug.Log(furn_go);
         //Debug.Log(furn_go.GetComponent<SpriteRenderer>());
 
         //char_go.GetComponent<SpriteRenderer>().sprite = GetSpriteForFurniture(furn);
 
-        char_go.transform.position = new Vector3(c.X, c.Y, 0);
+        CharGo.transform.position = new Vector3(c.X, c.Y, 0);
     }
 
 

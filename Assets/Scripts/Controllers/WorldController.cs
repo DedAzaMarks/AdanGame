@@ -12,7 +12,7 @@ public class WorldController : MonoBehaviour
     public static WorldController Instance { get; protected set; }
 
     // The world and tile data
-    public World world { get; protected set; }
+    public World World { get; protected set; }
 
     static bool loadWorld = false;
 
@@ -39,7 +39,7 @@ public class WorldController : MonoBehaviour
     void Update()
     {
         // TODO: Add pause/unpause, speed controls, etc...
-        world.Update(Time.deltaTime);
+        World.Update(Time.deltaTime);
 
     }
 
@@ -53,7 +53,7 @@ public class WorldController : MonoBehaviour
         int x = Mathf.FloorToInt(coord.x);
         int y = Mathf.FloorToInt(coord.y);
 
-        return world.GetTileAt(x, y);
+        return World.GetTileAt(x, y);
     }
 
     public void NewWorld()
@@ -69,7 +69,7 @@ public class WorldController : MonoBehaviour
 
         XmlSerializer serializer = new XmlSerializer(typeof(World));
         TextWriter writer = new StringWriter();
-        serializer.Serialize(writer, world);
+        serializer.Serialize(writer, World);
         writer.Close();
 
         Debug.Log(writer.ToString());
@@ -91,10 +91,10 @@ public class WorldController : MonoBehaviour
     void CreateEmptyWorld()
     {
         // Create a world with Empty tiles
-        world = new World(100, 100);
+        World = new World(100, 100);
 
         // Center the Camera
-        Camera.main.transform.position = new Vector3(world.Width / 2, world.Height / 2, Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3(World.Width / 2, World.Height / 2, Camera.main.transform.position.z);
 
     }
 
@@ -106,13 +106,13 @@ public class WorldController : MonoBehaviour
         XmlSerializer serializer = new XmlSerializer(typeof(World));
         TextReader reader = new StringReader(PlayerPrefs.GetString("SaveGame00"));
         Debug.Log(reader.ToString());
-        world = (World)serializer.Deserialize(reader);
+        World = (World)serializer.Deserialize(reader);
         reader.Close();
 
 
 
         // Center the Camera
-        Camera.main.transform.position = new Vector3(world.Width / 2, world.Height / 2, Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3(World.Width / 2, World.Height / 2, Camera.main.transform.position.z);
 
     }
 

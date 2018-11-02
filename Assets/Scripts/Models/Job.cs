@@ -8,59 +8,59 @@ public class Job
     // things like placing furniture, moving stored inventory,
     // working at a desk, and maybe even fighting enemies.
 
-    public Tile tile { get; protected set; }
-    float jobTime;
+    public Tile Tile { get; protected set; }
+    float JobTime;
 
-    public string jobObjectType
+    public string JobObjectType
     {
         get; protected set;
     }
 
-    Action<Job> cbJobComplete;
-    Action<Job> cbJobCancel;
+    Action<Job> CbJobComplete;
+    Action<Job> CbJobCancel;
 
-    public Job(Tile tile, string jobObjectType, Action<Job> cbJobComplete, float jobTime = 0.1f)
+    public Job(Tile Tile, string JobObjectType, Action<Job> CbJobComplete, float JobTime = 0.1f)
     {
-        this.tile = tile;
-        this.jobObjectType = jobObjectType;
-        this.cbJobComplete = this.cbJobComplete + cbJobComplete;
-        this.jobTime = jobTime;
+        this.Tile = Tile;
+        this.JobObjectType = JobObjectType;
+        this.CbJobComplete = this.CbJobComplete + CbJobComplete;
+        this.JobTime = JobTime;
     }
 
     public void RegisterJobCompleteCallback(Action<Job> cb)
     {
-        cbJobComplete = cbJobComplete + cb;
+        CbJobComplete = CbJobComplete + cb;
     }
 
     public void RegisterJobCancelCallback(Action<Job> cb)
     {
-        cbJobCancel = cbJobCancel + cb;
+        CbJobCancel = CbJobCancel + cb;
     }
 
     public void UnregisterJobCompleteCallback(Action<Job> cb)
     {
-        cbJobComplete = cbJobComplete - cb;
+        CbJobComplete = CbJobComplete - cb;
     }
 
     public void UnregisterJobCancelCallback(Action<Job> cb)
     {
-        cbJobCancel = cbJobCancel - cb;
+        CbJobCancel = CbJobCancel - cb;
     }
 
-    public void DoWork(float workTime)
+    public void DoWork(float WorkTime)
     {
-        jobTime = jobTime - workTime;
+        JobTime = JobTime - WorkTime;
 
-        if (jobTime <= 0)
+        if (JobTime <= 0)
         {
-            if (cbJobComplete != null)
-                cbJobComplete(this);
+            if (CbJobComplete != null)
+                CbJobComplete(this);
         }
     }
 
     public void CancelJob()
     {
-        if (cbJobCancel != null)
-            cbJobCancel(this);
+        if (CbJobCancel != null)
+            CbJobCancel(this);
     }
 }

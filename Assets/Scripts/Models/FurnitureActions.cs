@@ -4,7 +4,7 @@ using System.Collections;
 public static class FurnitureActions
 {
 
-    public static void Door_UpdateAction(Furniture furn, float deltaTime)
+    public static void DoorUpdateAction(Furniture furn, float deltaTime)
     {
         //Debug.Log("Door_UpdateAction: " + furn.furnParameters["openness"]);
 
@@ -29,7 +29,7 @@ public static class FurnitureActions
         }
     }
 
-    public static ENTERABILITY Door_IsEnterable(Furniture furn)
+    public static ENTERABILITY DoorIsEnterable(Furniture furn)
     {
         //Debug.Log("Door_IsEnterable");
         furn.furnParameters["is_opening"] = 1;

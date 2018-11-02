@@ -17,35 +17,35 @@ public enum ENTERABILITY { Yes, Never, Soon };
 
 public class Tile : IXmlSerializable
 {
-    private TileType _type = TileType.Empty;
+    private TileType Ttype = TileType.Empty;
     public TileType Type
     {
-        get { return _type; }
+        get { return Ttype; }
         set
         {
-            TileType oldType = _type;
-            _type = value;
+            TileType oldType = Ttype;
+            Ttype = value;
             // Call the callback and let things know we've changed.
 
-            if (cbTileChanged != null && oldType != _type)
+            if (CbTileChanged != null && oldType != Ttype)
             {
-                cbTileChanged(this);
+                CbTileChanged(this);
             }
         }
     }
 
     // LooseObject is something like a drill or a stack of metal sitting on the floor
-    Inventory inventory;
+    Inventory Inventory;
 
     // Furniture is something like a wall, door, or sofa.
-    public Furniture furniture
+    public Furniture Furniture
     {
         get;  set;
     }
 
     // FIXME: This seems like a terrible way to flag if a job is pending
     // on a tile.  This is going to be prone to errors in set/clear.
-    public Job pendingFurnitureJob;
+    public Job PendingFurnitureJob;
 
     // We need to know the context in which we exist. Probably. Maybe.
     public World world { get;  set; }
@@ -61,15 +61,15 @@ public class Tile : IXmlSerializable
             if (Type == TileType.Empty)
                 return 0;   // 0 is unwalkable
 
-            if (furniture == null)
+            if (Furniture == null)
                 return 1;
 
-            return 1 * furniture.movementCost;
+            return 1 * Furniture.movementCost;
         }
     }
 
     // The function we callback any time our tile's data changes
-    Action<Tile> cbTileChanged;
+    Action<Tile> CbTileChanged;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Tile"/> class.
@@ -89,7 +89,7 @@ public class Tile : IXmlSerializable
     /// </summary>
     public void RegisterTileTypeChangedCallback(Action<Tile> callback)
     {
-        cbTileChanged = cbTileChanged + callback;
+        CbTileChanged = CbTileChanged + callback;
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class Tile : IXmlSerializable
     /// </summary>
     public void UnregisterTileTypeChangedCallback(Action<Tile> callback)
     {
-        cbTileChanged = cbTileChanged - callback;
+        CbTileChanged = CbTileChanged - callback;
     }
 
     public bool PlaceFurniture(Furniture objInstance)
@@ -105,13 +105,13 @@ public class Tile : IXmlSerializable
         if (objInstance == null)
         {
             // We are uninstalling whatever was here before.
-            furniture = null;
+            Furniture = null;
             return true;
         }
 
         // objInstance isn't null
 
-        if (furniture != null)
+        if (Furniture != null)
         {
             //Debug.LogError("Trying to assign a furniture to a tile that already has one!");
             return false;
@@ -119,7 +119,7 @@ public class Tile : IXmlSerializable
 
         // At this point, everything's fine!
 
-        furniture = objInstance;
+        Furniture = objInstance;
         return true;
     }
 
@@ -141,17 +141,17 @@ public class Tile : IXmlSerializable
 		// if(furniture == null) 
 		// 	return false;
 
-		Furniture f = furniture;
+		Furniture f = Furniture;
 
         //Debug.Log("X="+X + " X+f.Wight=" + (X+f.Width));
         //Debug.Log("Y="+Y + " Y+f.Height="+ (X+f.Height));
         //Debug.Log(World.current.GetTileAt(X, Y));
 
-		Tile t = World.current.GetTileAt(X, Y);
+		Tile t = World.Current.GetTileAt(X, Y);
         //t = World.current.SetNullTileAt(x_off, y_off);
-        Debug.Log(t.furniture); 
-		t.furniture = null;
-        Debug.Log(t.furniture);
+        Debug.Log(t.Furniture); 
+		t.Furniture = null;
+        Debug.Log(t.Furniture);
 		return true;
 	}
 
@@ -224,9 +224,9 @@ public class Tile : IXmlSerializable
             return ENTERABILITY.Never;
 
         // Check out furniture to see if it has a special block on enterability
-        if (furniture != null && furniture.IsEnterable != null)
+        if (Furniture != null && Furniture.IsEnterable != null)
         {
-            return furniture.IsEnterable(furniture);
+            return Furniture.IsEnterable(Furniture);
         }
 
         return ENTERABILITY.Yes;

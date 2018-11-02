@@ -324,20 +324,21 @@
     <Compile Include="Assets\Scripts\Models\JobQueue.cs" />
     <Compile Include="Assets\Scripts\Models\Tile.cs" />
     <Compile Include="Assets\Scripts\Models\World.cs" />
-    <Compile Include="Assets\Scripts\Pathfinding\Path_AStar.cs" />
-    <Compile Include="Assets\Scripts\Pathfinding\Path_Edge.cs" />
-    <Compile Include="Assets\Scripts\Pathfinding\Path_Node.cs" />
-    <Compile Include="Assets\Scripts\Pathfinding\Path_TileGraph.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Priority_Queue\Priority Queue\FastPriorityQueue.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Priority_Queue\Priority Queue\FastPriorityQueueNode.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Priority_Queue\Priority Queue\IPriorityQueue.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Priority_Queue\Priority Queue\SimplePriorityQueue.cs" />
+    <Compile Include="Assets\Scripts\Pathfinding\PathAStar.cs" />
+    <Compile Include="Assets\Scripts\Pathfinding\PathEdge.cs" />
+    <Compile Include="Assets\Scripts\Pathfinding\PathNode.cs" />
+    <Compile Include="Assets\Scripts\Pathfinding\PathTileGraph.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PriorityQueue\Priority Queue\FastPriorityQueue.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PriorityQueue\Priority Queue\FastPriorityQueueNode.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PriorityQueue\Priority Queue\IPriorityQueue.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PriorityQueue\Priority Queue\SimplePriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Utilities\SimplePool.cs" />
     <Compile Include="Assets\UI\AutomaticVerticalSize.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Scripts\Utilities\Priority_Queue\GITHUB PAGE.txt" />
-    <None Include="Assets\Scripts\Utilities\Priority_Queue\LICENSE.txt" />
+    <None Include="Assets\LICENSE.txt" />
+    <None Include="Assets\Scripts\Utilities\PriorityQueue\GITHUB PAGE.txt" />
+    <None Include="Assets\Scripts\Utilities\PriorityQueue\LICENSE.txt" />
     <None Include="Assets\UI\Kenney Assets\License.txt" />
     <None Include="C:\Users\пользователь\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Dark.uss" />
     <None Include="C:\Users\пользователь\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Light.uss" />

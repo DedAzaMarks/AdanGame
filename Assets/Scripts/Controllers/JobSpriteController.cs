@@ -18,38 +18,38 @@ public class JobSpriteController : MonoBehaviour
         fsc = GameObject.FindObjectOfType<FurnitureSpriteController>();
 
         // FIXME: No such thing as a job queue yet!
-        WorldController.Instance.world.jobQueue.RegisterJobCreationCallback(OnJobCreated);
+        WorldController.Instance.World.MyJobQueue.RegisterJobCreationCallback(OnJobCreated);
     }
 
-    void OnJobCreated(Job job)
+    void OnJobCreated(Job Job)
     {
         // FIXME: We can only do furniture-building jobs.
 
         // TODO: Sprite
 
 
-        if (jobGameObjectMap.ContainsKey(job))
+        if (jobGameObjectMap.ContainsKey(Job))
         {
             //Debug.LogError("OnJobCreated for a jobGO that already exists -- most likely a job being RE-QUEUED, as opposed to created.");
             return;
         }
 
-        GameObject job_go = new GameObject();
+        GameObject JobGo = new GameObject();
 
         // Add our tile/GO pair to the dictionary.
-        jobGameObjectMap.Add(job, job_go);
+        jobGameObjectMap.Add(Job, JobGo);
 
-        job_go.name = "JOB_" + job.jobObjectType + "_" + job.tile.X + "_" + job.tile.Y;
-        job_go.transform.position = new Vector3(job.tile.X, job.tile.Y, 0);
-        job_go.transform.SetParent(this.transform, true);
+        JobGo.name = "JOB_" + Job.JobObjectType + "_" + Job.Tile.X + "_" + Job.Tile.Y;
+        JobGo.transform.position = new Vector3(Job.Tile.X, Job.Tile.Y, 0);
+        JobGo.transform.SetParent(this.transform, true);
 
-        SpriteRenderer sr = job_go.AddComponent<SpriteRenderer>();
-        sr.sprite = fsc.GetSpriteForFurniture(job.jobObjectType);
-        sr.color = new Color(0.5f, 1f, 0.5f, 0.25f);
-        sr.sortingLayerName = "Jobs";
+        SpriteRenderer SR = JobGo.AddComponent<SpriteRenderer>();
+        SR.sprite = fsc.GetSpriteForFurniture(Job.JobObjectType);
+        SR.color = new Color(0.5f, 1f, 0.5f, 0.25f);
+        SR.sortingLayerName = "Jobs";
 
-        job.RegisterJobCompleteCallback(OnJobEnded);
-        job.RegisterJobCancelCallback(OnJobEnded);
+        Job.RegisterJobCompleteCallback(OnJobEnded);
+        Job.RegisterJobCancelCallback(OnJobEnded);
     }
 
     void OnJobEnded(Job job)
@@ -58,12 +58,12 @@ public class JobSpriteController : MonoBehaviour
 
         // FIXME: We can only do furniture-building jobs.
 
-        GameObject job_go = jobGameObjectMap[job];
+        GameObject jobGo = jobGameObjectMap[job];
 
         job.UnregisterJobCompleteCallback(OnJobEnded);
         job.UnregisterJobCancelCallback(OnJobEnded);
 
-        Destroy(job_go);
+        Destroy(jobGo);
 
     }
 }

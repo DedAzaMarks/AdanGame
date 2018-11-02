@@ -11,7 +11,7 @@ public class Character : IXmlSerializable
     {
         get
         {
-            return Mathf.Lerp(currTile.X, nextTile.X, movementPercentage);
+            return Mathf.Lerp(CurrTile.X, NextTile.X, MovementPercentage);
         }
     }
 
@@ -19,78 +19,78 @@ public class Character : IXmlSerializable
     {
         get
         {
-            return Mathf.Lerp(currTile.Y, nextTile.Y, movementPercentage);
+            return Mathf.Lerp(CurrTile.Y, NextTile.Y, MovementPercentage);
         }
     }
 
-    public Tile currTile
+    public Tile CurrTile
     {
         get; protected set;
     }
 
 
-    Tile destTile;  // If we aren't moving, then destTile = currTile
-    Tile nextTile;  // The next tile in the pathfinding sequence
-    Path_AStar pathAStar;
-    float movementPercentage; // Goes from 0 to 1 as we move from currTile to destTile
+    Tile DestTile;  // If we aren't moving, then destTile = currTile
+    Tile NextTile;  // The next tile in the pathfinding sequence
+    PathAStar PathAStar;
+    float MovementPercentage; // Goes from 0 to 1 as we move from currTile to destTile
 
-    float speed = 6f;   // Tiles per second
+    float Speed = 6f;   // Tiles per second
 
-    Action<Character> cbCharacterChanged;
+    Action<Character> CbCharacterChanged;
 
-    Job myJob;
+    Job MyJob;
 
     public Character()
     {
         // Use only for serialization
     }
 
-    public Character(Tile tile)
+    public Character(Tile T)
     {
-        currTile = destTile = nextTile = tile;
+        CurrTile = DestTile = NextTile = T;
     }
 
-    void Update_DoJob(float deltaTime)
+    void UpdateDoJob(float deltaTime)
     {
         // Do I have a job?
-        if (myJob == null)
+        if (MyJob == null)
         {
             // Grab a new job.
-            myJob = currTile.world.jobQueue.Dequeue();
+            MyJob = CurrTile.world.MyJobQueue.Dequeue();
 
-            if (myJob != null)
+            if (MyJob != null)
             {
                 // We have a job!
 
                 // TODO: Check to see if the job is REACHABLE!
 
-                destTile = myJob.tile;
-                myJob.RegisterJobCompleteCallback(OnJobEnded);
-                myJob.RegisterJobCancelCallback(OnJobEnded);
+                DestTile = MyJob.Tile;
+                MyJob.RegisterJobCompleteCallback(OnJobEnded);
+                MyJob.RegisterJobCancelCallback(OnJobEnded);
             }
         }
 
         // Are we there yet?
-        if (myJob != null && currTile == myJob.tile)
+        if (MyJob != null && CurrTile == MyJob.Tile)
         {
-            myJob.DoWork(deltaTime);
+            MyJob.DoWork(deltaTime);
         }
 
     }
 
     public void AbandonJob()
     {
-        nextTile = destTile = currTile;
-        pathAStar = null;
-        currTile.world.jobQueue.Enqueue(myJob);
-        myJob = null;
+        NextTile = DestTile = CurrTile;
+        PathAStar = null;
+        CurrTile.world.MyJobQueue.Enqueue(MyJob);
+        MyJob = null;
     }
 
-    void Update_DoMovement(float deltaTime)
+    void UpdateDoMovement(float deltaTime)
     {
-        if (currTile == destTile)
+        if (CurrTile == DestTile)
         {
-            pathAStar = null;
+            PathAStar = null;
             return; // We're already were we want to be.
         }
 
@@ -98,31 +98,31 @@ public class Character : IXmlSerializable
         // nextTile = The tile I am currently entering
         // destTile = Our final destination -- we never walk here directly, but instead use it for the pathfinding
 
-        if (nextTile == null || nextTile == currTile)
+        if (NextTile == null || NextTile == CurrTile)
         {
             // Get the next tile from the pathfinder.
-            if (pathAStar == null || pathAStar.Length() == 0)
+            if (PathAStar == null || PathAStar.Length() == 0)
             {
                 // Generate a path to our destination
-                pathAStar = new Path_AStar(currTile.world, currTile, destTile); // This will calculate a path from curr to dest.
-                if (pathAStar.Length() == 0)
+                PathAStar = new PathAStar(CurrTile.world, CurrTile, DestTile); // This will calculate a path from curr to dest.
+                if (PathAStar.Length() == 0)
                 {
                     //Debug.LogError("Path_AStar returned no path to destination!");
                     AbandonJob();
-                    pathAStar = null;
+                    PathAStar = null;
                     return;
                 }
 
                 // Let's ignore the first tile, because that's the tile we're currently in.
-                nextTile = pathAStar.Dequeue();
+                NextTile = PathAStar.Dequeue();
 
             }
 
 
             // Grab the next waypoint from the pathing system!
-            nextTile = pathAStar.Dequeue();
+            NextTile = PathAStar.Dequeue();
 
-            if (nextTile == currTile)
+            if (NextTile == CurrTile)
             {
                 //Debug.LogError("Update_DoMovement - nextTile is currTile?");
             }
@@ -138,12 +138,12 @@ public class Character : IXmlSerializable
         // We are going to use Euclidean distance FOR NOW...
         // But when we do the pathfinding system, we'll likely
         // switch to something like Manhattan or Chebyshev distance
-        float distToTravel = Mathf.Sqrt(
-            Mathf.Pow(currTile.X - nextTile.X, 2) +
-            Mathf.Pow(currTile.Y - nextTile.Y, 2)
+        float DistToTravel = Mathf.Sqrt(
+            Mathf.Pow(CurrTile.X - NextTile.X, 2) +
+            Mathf.Pow(CurrTile.Y - NextTile.Y, 2)
         );
 
-        if (nextTile.IsEnterable() == ENTERABILITY.Never)
+        if (NextTile.IsEnterable() == ENTERABILITY.Never)
         {
             // Most likely a wall got built, so we just need to reset our pathfinding information.
             // FIXME: Ideally, when a wall gets spawned, we should invalidate our path immediately,
@@ -151,11 +151,11 @@ public class Character : IXmlSerializable
             //		  To save CPU, maybe we can only check every so often?
             //		  Or maybe we should register a callback to the OnTileChanged event?
             //Debug.LogError("FIXME: A character was trying to enter an unwalkable tile.");
-            nextTile = null;    // our next tile is a no-go
-            pathAStar = null;   // clearly our pathfinding info is out of date.
+            NextTile = null;    // our next tile is a no-go
+            PathAStar = null;   // clearly our pathfinding info is out of date.
             return;
         }
-        else if (nextTile.IsEnterable() == ENTERABILITY.Soon)
+        else if (NextTile.IsEnterable() == ENTERABILITY.Soon)
         {
             // We can't enter the NOW, but we should be able to in the
             // future. This is likely a DOOR.
@@ -165,15 +165,15 @@ public class Character : IXmlSerializable
         }
 
         // How much distance can be travel this Update?
-        float distThisFrame = speed / nextTile.movementCost * deltaTime;
+        float distThisFrame = Speed / NextTile.movementCost * deltaTime;
 
         // How much is that in terms of percentage to our destination?
-        float percThisFrame = distThisFrame / distToTravel;
+        float percThisFrame = distThisFrame / DistToTravel;
 
         // Add that to overall percentage travelled.
-        movementPercentage = movementPercentage + percThisFrame;
+        MovementPercentage = MovementPercentage + percThisFrame;
 
-        if (movementPercentage >= 1)
+        if (MovementPercentage >= 1)
         {
             // We have reached our destination
 
@@ -181,58 +181,58 @@ public class Character : IXmlSerializable
             //       If there are no more tiles, then we have TRULY
             //       reached our destination.
 
-            currTile = nextTile;
-            movementPercentage = 0;
+            CurrTile = NextTile;
+            MovementPercentage = 0;
             // FIXME?  Do we actually want to retain any overshot movement?
         }
 
 
     }
 
-    public void Update(float deltaTime)
+    public void Update(float DeltaTime)
     {
         //Debug.Log("Character Update");
 
-        Update_DoJob(deltaTime);
+        UpdateDoJob(DeltaTime);
 
-        Update_DoMovement(deltaTime);
+        UpdateDoMovement(DeltaTime);
 
-        if (cbCharacterChanged != null)
-            cbCharacterChanged(this);
+        if (CbCharacterChanged != null)
+            CbCharacterChanged(this);
 
     }
 
     public void SetDestination(Tile tile)
     {
-        if (currTile.IsNeighbour(tile, true) == false)
+        if (CurrTile.IsNeighbour(tile, true) == false)
         {
             Debug.Log("Character::SetDestination -- Our destination tile isn't actually our neighbour.");
         }
 
-        destTile = tile;
+        DestTile = tile;
     }
 
     public void RegisterOnChangedCallback(Action<Character> cb)
     {
-        cbCharacterChanged = cbCharacterChanged + cb;
+        CbCharacterChanged = CbCharacterChanged + cb;
     }
 
     public void UnregisterOnChangedCallback(Action<Character> cb)
     {
-        cbCharacterChanged = cbCharacterChanged - cb;
+        CbCharacterChanged = CbCharacterChanged - cb;
     }
 
     void OnJobEnded(Job j)
     {
         // Job completed or was cancelled.
 
-        if (j != myJob)
+        if (j != MyJob)
         {
             //Debug.LogError("Character being told about job that isn't his. You forgot to unregister something.");
             return;
         }
 
-        myJob = null;
+        MyJob = null;
     }
 
 
@@ -243,8 +243,8 @@ public class Character : IXmlSerializable
 
     public void WriteXml(XmlWriter writer)
     {
-        writer.WriteAttributeString("X", currTile.X.ToString());
-        writer.WriteAttributeString("Y", currTile.Y.ToString());
+        writer.WriteAttributeString("X", CurrTile.X.ToString());
+        writer.WriteAttributeString("Y", CurrTile.Y.ToString());
     }
 
     public void ReadXml(XmlReader reader)
