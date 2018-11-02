@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 
-public enum BuildMode { DECONSTRUCT }
+public enum BuildMode
+{
+    FLOOR,
+    FURNITURE,
+    DECONSTRUCT
+}
 public class BuildModeController : MonoBehaviour
 {
-    public BuildMode buildMode;
+    public BuildMode buildMode = BuildMode.FLOOR;
     bool buildModeIsObjects = false;
     TileType buildModeTile = TileType.Floor;
     string buildModeObjectType;

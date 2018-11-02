@@ -200,31 +200,7 @@ public class FurnitureSpriteController : MonoBehaviour
 
         // Check for neighbours North, East, South, West
 
-        int x = furn.tile.X;
-        int y = furn.tile.Y;
-
-        Tile t;
-
-        t = world.GetTileAt(x, y + 1);
-        if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
-        {
-            spriteName = spriteName + "N";
-        }
-        t = world.GetTileAt(x + 1, y);
-        if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
-        {
-            spriteName = spriteName + "E";
-        }
-        t = world.GetTileAt(x, y - 1);
-        if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
-        {
-            spriteName = spriteName + "S";
-        }
-        t = world.GetTileAt(x - 1, y);
-        if (t != null && t.furniture != null && t.furniture.objectType == furn.objectType)
-        {
-            spriteName = spriteName + "W";
-        }
+        spriteName = WallNeighoburs(furn, spriteName);
 
         // For example, if this object has all four neighbours of
         // the same type, then the string will look like:
@@ -239,6 +215,44 @@ public class FurnitureSpriteController : MonoBehaviour
 
         return furnitureSprites[spriteName];
 
+    }
+
+    string WallNeighoburs(Furniture furniture, string s)
+    {
+        int x = furniture.tile.X;
+        int y = furniture.tile.Y;
+
+        Tile t;
+
+        t = world.GetTileAt(x, y + 1);
+        if (furnitureCheck(t, furniture))
+        {
+            s = s + "N";
+        }
+        t = world.GetTileAt(x + 1, y);
+        if (furnitureCheck(t, furniture))
+        {
+            s = s + "E";
+        }
+        t = world.GetTileAt(x, y - 1);
+        if (furnitureCheck(t, furniture))
+        {
+            s = s + "S";
+        }
+        t = world.GetTileAt(x - 1, y);
+        if (furnitureCheck(t, furniture))
+        {
+            s = s + "W";
+        }
+
+        return s;
+    }
+
+    bool furnitureCheck(Tile t, Furniture furniture)
+    {
+        if (t != null && t.furniture != null && t.furniture.objectType == furniture.objectType)
+            return true;
+        return false;
     }
 
 
