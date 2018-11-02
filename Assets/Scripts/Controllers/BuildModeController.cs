@@ -1,14 +1,9 @@
 ﻿using UnityEngine;
 
-public enum BuildMode
-{
-    FLOOR,
-    FURNITURE,
-    DECONSTRUCT
-}
+public enum BuildMode { DECONSTRUCT }
 public class BuildModeController : MonoBehaviour
 {
-    public BuildMode buildMode = BuildMode.FLOOR;
+    public BuildMode buildMode;
     bool buildModeIsObjects = false;
     TileType buildModeTile = TileType.Floor;
     string buildModeObjectType;
@@ -39,10 +34,10 @@ public class BuildModeController : MonoBehaviour
 
     public void SetMode_BulldozeFurniture()
     {
-        
+
         buildMode = BuildMode.DECONSTRUCT;
-		GameObject.FindObjectOfType<MouseController>().StartBuildMode();
-	
+        GameObject.FindObjectOfType<MouseController>().StartBuildMode();
+
     }
 
     public void DoPathfindingTest()
@@ -92,11 +87,7 @@ public class BuildModeController : MonoBehaviour
 
                 // Add the job to the queue
                 WorldController.Instance.world.jobQueue.Enqueue(j);
-
             }
-
-
-
         }
         else
         {

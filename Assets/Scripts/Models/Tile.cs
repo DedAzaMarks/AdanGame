@@ -143,9 +143,9 @@ public class Tile : IXmlSerializable
 
 		Furniture f = furniture;
 
-        Debug.Log("X="+X + " X+f.Wight=" + (X+f.Width));
-        Debug.Log("Y="+Y + " Y+f.Height="+ (X+f.Height));
-        Debug.Log(World.current.GetTileAt(X, Y));
+        //Debug.Log("X="+X + " X+f.Wight=" + (X+f.Width));
+        //Debug.Log("Y="+Y + " Y+f.Height="+ (X+f.Height));
+        //Debug.Log(World.current.GetTileAt(X, Y));
 
 		Tile t = World.current.GetTileAt(X, Y);
         //t = World.current.SetNullTileAt(x_off, y_off);
